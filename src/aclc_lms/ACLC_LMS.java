@@ -10,7 +10,7 @@ public class ACLC_LMS {
         new Config().setLookAndFeel();
         
         
-        LoginForm loginForm = new LoginForm();
+        LoginFrame loginForm = new LoginFrame();
         loginForm.setLocationRelativeTo(null); 
         loginForm.setTitle("Login");
         loginForm.setVisible(true);

@@ -2,13 +2,14 @@ package aclc_lms;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -60,5 +61,15 @@ public class Helper {
     
     public static void showMsg(String msg) {
         JOptionPane.showMessageDialog(null, msg);
+        
+    }
+    
+    public JDialog dialogBuilder(JFrame parentFrame, JPanel mainPanel, String title, boolean bool) {
+        JDialog dialog = new JDialog(parentFrame, title, bool);
+        dialog.getContentPane().add(mainPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        return dialog;
     }
 }
