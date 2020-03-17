@@ -1,5 +1,6 @@
 package aclc_lms.employee;
 
+import aclc_lms.Helper;
 import aclc_lms.Model;
 import aclc_lms.UserModel;
 import java.sql.ResultSet;
@@ -11,17 +12,20 @@ public class StatusPanel extends javax.swing.JPanel {
        
     private final Model model = new Model();
     private final UserModel user;
+    private final Helper helper;
     
     public StatusPanel(UserModel user) {
         initComponents();
         this.user = user;
         
+        helper = new Helper(StatusPanel.class.getName());
+        
         ResultSet resultSet = model.getLastLeave(user.getpId());
         try {
             if (resultSet.next()) {
                 txtLeaveType.setText(resultSet.getString("leave_name"));
-                txtStartDate.setText(resultSet.getString("start_date"));
-                txtEndDate.setText(resultSet.getString("end_date"));
+                txtStartDate.setText(helper.getddMMyyyyObject(resultSet.getString("start_date")));
+                txtEndDate.setText(helper.getddMMyyyyObject(resultSet.getString("end_date")));
                 txtStatus.setText(resultSet.getString("status"));
                 txtRemark.setText(resultSet.getString("command"));
             }

@@ -1,10 +1,11 @@
 package aclc_lms.admin;
 
-import aclc_lms.ChangePasswordFrame;
 import aclc_lms.Config;
 import aclc_lms.Helper;
 import aclc_lms.LoginFrame;
 import aclc_lms.Model;
+import aclc_lms.PanelChangePassword;
+import aclc_lms.ReasonRemarkPanel;
 import aclc_lms.UserModel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,12 +30,15 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private final Model model = new Model();
     public UserModel user;
 
-    public AdminMainFrame() {
+    public AdminMainFrame(UserModel user) {
         initComponents();
         initAll();
+        this.user = user;
         // Load initial data to table 
         loadAllData();
-    } 
+        
+        helper.sendSms("09955426109", "Tikang na ine ha ALAC EMLS SYSTEM!");
+} 
     
     private void initAll() {
         this.setIconImage(config.appIconImage);
@@ -158,6 +162,10 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             leaveTableModel = model.getLeaveTableReportModel(sqlCondition);
         }
         
+        // Update start date and end date column 
+        int[] colIndex = {5, 6};// Put the column index of the start_date and end_date column
+        leaveTableModel = model.updateStartEndDateColumn(leaveTableModel, colIndex);
+        
         tblLeaveReport.setShowGrid(false);
         tblLeaveReport.setIntercellSpacing(new Dimension(0,0));
 
@@ -193,6 +201,10 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             String sqlCondition = " AND (leave_request.leave_request_id LIKE '%"+ search +"%' OR employee.employee_id LIKE '%"+ search +"%' OR employee.f_name LIKE '%"+ search +"%' OR employee.l_name LIKE '%"+ search +"%' OR employee.department LIKE '%"+ search +"%' OR leave_request.start_date LIKE '%"+ search +"%' OR leave_request.end_date LIKE '%"+ search +"%' OR leave_type.leave_name LIKE '%"+ search +"%')";
             leaveTableModel = model.getLeaveTableModel(sqlCondition);
         }
+        
+        // Update start date and end date column 
+        int[] colIndex = {5, 6};// Put the column index of the start_date and end_date column
+        leaveTableModel = model.updateStartEndDateColumn(leaveTableModel, colIndex);
         
         tblLeave.setShowGrid(false);
         tblLeave.setIntercellSpacing(new Dimension(0,0));
@@ -332,10 +344,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         txtSearchLeaveReport = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton3 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
+        msgPanel = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuAccount = new javax.swing.JMenu();
         changePasswordMenu = new javax.swing.JMenuItem();
@@ -564,7 +573,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -981,7 +990,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 535, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tabMain.addTab("tab2", jPanel1);
@@ -1086,7 +1095,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                         .addComponent(txtSearchEmployeeReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1193,7 +1202,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                         .addComponent(txtSearchLeaveReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1201,33 +1210,20 @@ public final class AdminMainFrame extends javax.swing.JFrame {
 
         tabMain.addTab("tab4", tabPaneReport);
 
-        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        msgPanel.setBackground(new java.awt.Color(255, 255, 255));
 
-        jToolBar1.setRollover(true);
-
-        jButton3.setText("Account");
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton3);
-
-        jLabel10.setText("jLabel10");
-        jToolBar1.add(jLabel10);
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1248, Short.MAX_VALUE)
+        javax.swing.GroupLayout msgPanelLayout = new javax.swing.GroupLayout(msgPanel);
+        msgPanel.setLayout(msgPanelLayout);
+        msgPanelLayout.setHorizontalGroup(
+            msgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1248, Short.MAX_VALUE)
         );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 571, Short.MAX_VALUE))
+        msgPanelLayout.setVerticalGroup(
+            msgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
 
-        tabMain.addTab("tab4", jPanel9);
+        tabMain.addTab("tab4", msgPanel);
 
         jMenuBar1.setBackground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -1416,7 +1412,9 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             if (isPasswordMatch()) {
                 String empId = model.generateEmployeeId(txtDepartment.getSelectedItem().toString());
                 Date dob = helper.dateConvert(txtDob.getDate());
-                String sql = "INSERT INTO employee VALUES(p_id, '"+ empId +"', '"+ txtFname.getText() +"', '"+ txtLname.getText() +"','"+ txtMname.getText() +"', '"+ txtGender.getSelectedItem().toString() +"', '"+ dob +"', '"+ txtContactNo.getText() +"', '"+ txtAddress.getText() +"', '"+ txtDepartment.getSelectedItem().toString()+"', '"+ txtPassword.getText() +"', TIMESTAMP)";
+                
+                
+                String sql = "INSERT INTO employee VALUES(p_id, '"+ empId +"', '"+ txtFname.getText() +"', '"+ txtLname.getText() +"','"+ txtMname.getText() +"', '"+ txtGender.getSelectedItem().toString() +"', '"+ dob +"', '"+ txtContactNo.getText() +"', '"+ txtAddress.getText() +"', '"+ txtDepartment.getSelectedItem().toString()+"', '"+ txtPassword.getText()+"', '"+ helper.getCurrentDateTime() +"')";
                 model.query(sql);
                 loadEmployeeData("all");
                 clearEmployeeFields();
@@ -1559,7 +1557,11 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void tblLeaveReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLeaveReportMouseClicked
-        // TODO add your handling code here:
+        int row = tblLeaveReport.getSelectedRow();
+        String reason = tblLeaveReport.getModel().getValueAt(row, 7).toString();
+        String remark = tblLeaveReport.getModel().getValueAt(row, 8).toString();
+        String selectedRow = tblLeaveReport.getModel().getValueAt(row, 0).toString();
+        helper.dialogBuilder(this, new ReasonRemarkPanel(reason, remark), "#"+ selectedRow, true);
     }//GEN-LAST:event_tblLeaveReportMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1567,10 +1569,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void changePasswordMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordMenuActionPerformed
-        ChangePasswordFrame changePassword = new ChangePasswordFrame();
-        changePassword.setLocationRelativeTo(null); 
-        changePassword.setTitle("Change Password");
-        changePassword.setVisible(true);
+        helper.dialogBuilder(this, new PanelChangePassword(user), "Change Password", true);
     }//GEN-LAST:event_changePasswordMenuActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -1587,7 +1586,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
-            new AdminMainFrame().setVisible(true);
+            new AdminMainFrame(new UserModel()).setVisible(true);
         });
     }
 
@@ -1604,10 +1603,8 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem changePasswordMenu;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -1646,7 +1643,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1654,8 +1650,8 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenu menuAccount;
+    private javax.swing.JPanel msgPanel;
     private javax.swing.JTabbedPane tabMain;
     private javax.swing.JTabbedPane tabPaneReport;
     private javax.swing.JTable tblEmployee;

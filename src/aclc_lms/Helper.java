@@ -2,6 +2,11 @@ package aclc_lms;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.io.IOException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -11,7 +16,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 /**
  *
  * @author Junrey Algario
@@ -71,5 +78,38 @@ public class Helper {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         return dialog;
+    }
+    
+    public String getCurrentDateTime() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateobj = new Date(System.currentTimeMillis());
+        return df.format(dateobj);
+    }
+    //dd MMMM yyyy = 02 January 2018
+    public String getddMMyyyyObject(String dateObject) {
+        DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+        java.util.Date date;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(dateObject);
+        } catch (ParseException ex) {
+            return "Failed to parse string to date.";
+        }
+        return df.format(date);
+    }
+    
+    public void sendSms(String contactNo, String message) {
+        
+        OkHttpClient client = new OkHttpClient();
+        String url = "http://localhost/api/send_sms.php?contact_no="+ contactNo + "&message="+ message;
+        Request request = new Request.Builder().url(url).build();
+
+        Response response;
+        try {
+            response = client.newCall(request).execute();
+            JOptionPane.showMessageDialog(null, response.body().string());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Failed okhhtp");
+            this.logException("FAILED OKHTTP", ex.toString());
+        }
     }
 }

@@ -1,18 +1,17 @@
 package aclc_lms;
 
-import java.awt.Color;
-import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
-public class ChangePasswordFrame extends javax.swing.JFrame {
+public class PanelChangePassword extends javax.swing.JPanel {
     
     private final Model model = new Model();
+    private UserModel user;
 
-    public ChangePasswordFrame() {
+    public PanelChangePassword(UserModel user) {
         initComponents();
         
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("asset/acc.png")));
-        this.getContentPane().setBackground(Color.white);
+        this.user = user;
+        
     }
     
     private boolean inputValidation() {
@@ -43,13 +42,6 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtConfirm = new javax.swing.JPasswordField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Change Password");
-        setBackground(new java.awt.Color(255, 255, 255));
-        setName("changePassword"); // NOI18N
-        setResizable(false);
-        setType(java.awt.Window.Type.POPUP);
-
         txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
@@ -78,8 +70,8 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
 
         txtConfirm.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -118,15 +110,16 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeActionPerformed
         if (inputValidation()) {
             if (txtPassword.getText().equals(txtConfirm.getText())) {
-                if (model.changePassword(txtOld.getText(), txtPassword.getText())) {
+                if (model.changePassword(user.getpId(), txtOld.getText(), txtPassword.getText())) {
                     JOptionPane.showMessageDialog(null, "Successfully changed password.");
-                    this.dispose();
+                    txtOld.setText("");
+                    txtPassword.setText("");
+                    txtConfirm.setText("");
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong current password. Try again.");
                 }
@@ -137,12 +130,6 @@ public class ChangePasswordFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnChangeActionPerformed
 
-    public static void main(String args[]) {
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new ChangePasswordFrame().setVisible(true);
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChange;

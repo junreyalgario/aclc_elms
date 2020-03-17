@@ -133,8 +133,7 @@ public class LoginFrame extends javax.swing.JFrame {
             if (user.isAuthSuccess) {
                 switch (user.getDepartment()) {
                     case "Admin":
-                        adminMainForm = new AdminMainFrame();
-                        adminMainForm.user = user;
+                        adminMainForm = new AdminMainFrame(user);
                         adminMainForm.setLocationRelativeTo(null);
                         adminMainForm.setVisible(true);
                         break;

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -43,10 +44,9 @@ public class Model {
         return user;
     }
     
-    public boolean changePassword(String password, String newPassword) {
-        String employeeId = "1";
-        if (searchUser(employeeId, password)) {
-            String sql = "UPDATE employee SET password = '"+ newPassword +"' WHERE p_id = "+ employeeId;
+    public boolean changePassword(String pId, String password, String newPassword) {
+        if (searchUser(pId, password)) {
+            String sql = "UPDATE employee SET password = '"+ newPassword +"' WHERE p_id = "+ pId;
             db.executeSql(sql);
             return true;
         } else {
@@ -80,6 +80,11 @@ public class Model {
     
     public TableModel getLeaveTableReportModel(String AND) {
         String sql = "SELECT leave_request.leave_request_id, employee.employee_id, employee.department, CONCAT(employee.f_name, ' ', employee.l_name) as fullname, leave_type.leave_name, leave_request.start_date, leave_request.end_date, leave_request.reason, leave_request.command, leave_request.status FROM leave_type JOIN leave_request ON leave_type.leave_type_id = leave_request.leave_type_id JOIN employee ON leave_request.p_id = employee.p_id WHERE leave_request.seen = 1 "+ AND;
+        return DbUtils.resultSetToTableModel(getResultSet(sql));
+    }
+    
+    public TableModel getEmployeeLeaveTableReportModel(String AND) {
+        String sql = "SELECT leave_request.leave_request_id, leave_type.leave_name, leave_request.start_date, leave_request.end_date, leave_request.reason, leave_request.command, leave_request.status FROM leave_type JOIN leave_request ON leave_type.leave_type_id = leave_request.leave_type_id JOIN employee ON leave_request.p_id = employee.p_id WHERE leave_request.seen = 1 "+ AND;
         return DbUtils.resultSetToTableModel(getResultSet(sql));
     }
     
@@ -155,4 +160,14 @@ public class Model {
         }
     }
    
+    public TableModel updateStartEndDateColumn(TableModel tblModel, int[] colIndex) {
+        int tblRowCount = tblModel.getRowCount();
+        for (int i=0; i <tblRowCount; i++) {
+            String sDate = helper.getddMMyyyyObject(tblModel.getValueAt(i, colIndex[0]).toString());
+            String eDate = helper.getddMMyyyyObject(tblModel.getValueAt(i, colIndex[1]).toString());
+            tblModel.setValueAt(sDate, i, colIndex[0]);
+            tblModel.setValueAt(eDate, i, colIndex[1]);
+        }
+        return tblModel;
+    }
 }
