@@ -2,6 +2,7 @@ package aclc_lms;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -97,7 +98,7 @@ public class Helper {
         return df.format(date);
     }
     
-    public void sendSms(String contactNo, String message) {
+    public boolean sendSms(String contactNo, String message) {
         
         OkHttpClient client = new OkHttpClient();
         String url = "http://localhost/api/send_sms.php?contact_no="+ contactNo + "&message="+ message;
@@ -106,10 +107,24 @@ public class Helper {
         Response response;
         try {
             response = client.newCall(request).execute();
-            JOptionPane.showMessageDialog(null, response.body().string());
+            return response.body().string().equals("1");
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Failed okhhtp");
-            this.logException("FAILED OKHTTP", ex.toString());
+            this.logException("Failed to send sms.", ex.toString());
+            return false;
         }
+    }
+    
+    public void addWindowClosingEvent(JFrame jframe) {
+        jframe.addWindowListener(new java.awt.event.WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (JOptionPane.showConfirmDialog(null, "Are you sure you want to close application?", "Close Application?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                } else {
+                    jframe.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                }
+                super.windowClosing(e);
+            }
+        });
     }
 }

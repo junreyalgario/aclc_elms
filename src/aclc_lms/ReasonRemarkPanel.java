@@ -19,6 +19,8 @@ public class ReasonRemarkPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtRemark = new javax.swing.JTextArea();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel42.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jLabel42.setText("Reason");
 

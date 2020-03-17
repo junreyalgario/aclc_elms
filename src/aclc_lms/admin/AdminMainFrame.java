@@ -5,6 +5,7 @@ import aclc_lms.Helper;
 import aclc_lms.LoginFrame;
 import aclc_lms.Model;
 import aclc_lms.PanelChangePassword;
+import aclc_lms.ProfilePanel;
 import aclc_lms.ReasonRemarkPanel;
 import aclc_lms.UserModel;
 import java.awt.Color;
@@ -14,6 +15,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -36,9 +38,9 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         this.user = user;
         // Load initial data to table 
         loadAllData();
-        
-        helper.sendSms("09955426109", "Tikang na ine ha ALAC EMLS SYSTEM!");
-} 
+        JFrame frame = this;
+        helper.addWindowClosingEvent(frame);
+    } 
     
     private void initAll() {
         this.setIconImage(config.appIconImage);
@@ -347,8 +349,10 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         msgPanel = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuAccount = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         changePasswordMenu = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -1236,6 +1240,15 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         menuAccount.setLabel("ADMIN - JUNREY ALGARIO");
         menuAccount.setPreferredSize(new java.awt.Dimension(300, 30));
 
+        jMenuItem4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jMenuItem4.setText("Profile");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        menuAccount.add(jMenuItem4);
+
         changePasswordMenu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         changePasswordMenu.setText("Change Password");
         changePasswordMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -1253,6 +1266,15 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             }
         });
         menuAccount.add(jMenuItem3);
+
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jMenuItem5.setText("Logout");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        menuAccount.add(jMenuItem5);
 
         jMenuBar1.add(menuAccount);
 
@@ -1500,10 +1522,30 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         long dateDiff = helper.getDateDiff(txtStartDate.getDate(), txtEndDate.getDate());
         if (dateDiff > 0) {
             String leaveId = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 0).toString();
+            String employeeId = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 1).toString();
+            String name = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 3).toString();
             Date startDate = helper.dateConvert(txtStartDate.getDate());
             Date endDate = helper.dateConvert(txtEndDate.getDate());
             if (txtCommand.getText().trim().equals("")) {
                 txtCommand.setText("No remark");
+            }
+            
+            String contactNo = model.getEmployeeContactNo(employeeId);
+            if (contactNo.trim().equals("")) {
+                JOptionPane.showMessageDialog(null, "Failed to send sms notification. Employee has no mobile contact number.");
+            } else {
+                boolean temp = false;
+                String msg = "Your leave application has been approved!";
+                while (!temp) {
+                    if (helper.sendSms(contactNo, msg)) {  
+                        JOptionPane.showMessageDialog(null, "Sms notification has been sent to "+ name +".");
+                        temp = true;
+                    } else {
+                        if (JOptionPane.showConfirmDialog(null, "Failed to send sms. Would you like to resend sms notification?", "Select Option", JOptionPane.YES_NO_OPTION) != 0) {
+                            temp = true;
+                        }
+                    }
+                }
             }
             String sql = "UPDATE leave_request SET seen = 1, command = '"+ txtCommand.getText() +"', status = 'Accepted', start_date = '"+ startDate +"', end_date = '"+ endDate +"' WHERE leave_request_id = "+ leaveId;
             model.query(sql);
@@ -1519,6 +1561,25 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             String leaveId = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 0).toString();
             if (txtCommand.getText().trim().equals("")) {
                 txtCommand.setText("No remark");
+            }
+            String employeeId = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 1).toString();
+            String name = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 3).toString();
+            String contactNo = model.getEmployeeContactNo(employeeId);
+            if (contactNo.trim().equals("")) {
+                JOptionPane.showMessageDialog(null, "Failed to send sms notification. Employee has no mobile contact number.");
+            } else {
+                boolean temp = false;
+                String msg = "Your leave application has been approved!";
+                while (!temp) {
+                    if (helper.sendSms(contactNo, msg)) {  
+                        JOptionPane.showMessageDialog(null, "Sms notification has been sent to "+ name +".");
+                        temp = true;
+                    } else {
+                        if (JOptionPane.showConfirmDialog(null, "Failed to send sms. Would you like to resend sms notification?", "Select Option", JOptionPane.YES_NO_OPTION) != 0) {
+                            temp = true;
+                        }
+                    }
+                }
             }
             String sql = "UPDATE leave_request SET status = 'Rejected', seen = 1, command = '"+ txtCommand.getText() +"' WHERE leave_request_id = "+ leaveId;
             model.query(sql);
@@ -1573,13 +1634,21 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_changePasswordMenuActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to logout your account?") == 0) {
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to logout your account?", "Logout Account?", JOptionPane.YES_NO_OPTION) == 0) {
+            user = new UserModel();
             this.dispose();
             LoginFrame loginForm = new LoginFrame();
-            loginForm.setLocationRelativeTo(null); 
+            loginForm.setLocationRelativeTo(null);
             loginForm.setVisible(true);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+    
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+       helper.dialogBuilder(this, new ProfilePanel(user), "Profile", true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1636,6 +1705,8 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

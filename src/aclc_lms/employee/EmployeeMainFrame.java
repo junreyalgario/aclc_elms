@@ -6,6 +6,7 @@ import aclc_lms.LoginFrame;
 import aclc_lms.PanelChangePassword;
 import aclc_lms.ProfilePanel;
 import aclc_lms.UserModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class EmployeeMainFrame extends javax.swing.JFrame {
@@ -24,6 +25,9 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
         this.setTitle(config.companyName +" "+ config.appName +" - Staff");
         helper = new Helper(EmployeeMainFrame.class.getName());
         lblUser.setText("Welcome "+ user.getFullName() +"!");
+        
+        JFrame frame = this;
+        helper.addWindowClosingEvent(frame);
     }
    
     @SuppressWarnings("unchecked")
@@ -191,8 +195,8 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_changePasswordMenuActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to logout your account?") == 0) {
-            user = null;
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to logout your account?", "Logout Account?", JOptionPane.YES_NO_OPTION) == 0) {
+            user = new UserModel();
             this.dispose();
             LoginFrame loginForm = new LoginFrame();
             loginForm.setLocationRelativeTo(null);

@@ -1,5 +1,6 @@
 package aclc_lms;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 public class PanelChangePassword extends javax.swing.JPanel {
@@ -11,7 +12,7 @@ public class PanelChangePassword extends javax.swing.JPanel {
         initComponents();
         
         this.user = user;
-        
+        this.setBackground(Color.WHITE);
     }
     
     private boolean inputValidation() {

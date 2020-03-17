@@ -1,8 +1,11 @@
 package aclc_lms;
 
+import javax.swing.JOptionPane;
+
 public class ProfilePanel extends javax.swing.JPanel {
     
     private UserModel user;
+    private final Model model = new Model();
     private final Helper helper;
 
     public ProfilePanel(UserModel user) {
@@ -17,7 +20,7 @@ public class ProfilePanel extends javax.swing.JPanel {
         txtMname.setText(user.getmName());
         txtEmpId.setText(user.getEmployeeId());
         txtGender.setText(user.getGender());
-        txtDob.setText(user.getDob());
+        txtDob.setText(helper.getddMMyyyyObject(user.getDob()));
         txtContactNo.setText(user.getContactNo());
         txtAddress.setText(user.getAddress());
         
@@ -231,7 +234,15 @@ public class ProfilePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        
+        if (txtContactNo.getText().trim().equals("") && txtAddress.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "All fields are required!");
+        } else {
+            if (model.updateProfile(txtContactNo.getText(), txtAddress.getText(), user.getpId())) {
+                user.setContactNo(txtContactNo.getText());
+                user.setAddress(txtAddress.getText());
+                JOptionPane.showMessageDialog(null, "Profile update success!");
+            }
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
 

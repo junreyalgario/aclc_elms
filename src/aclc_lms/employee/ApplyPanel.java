@@ -50,6 +50,8 @@ public class ApplyPanel extends javax.swing.JPanel {
         txtReason = new javax.swing.JTextArea();
         btnSave = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel7.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel7.setForeground(java.awt.SystemColor.textHighlight);
         jLabel7.setText("LEAVE APPLICATION");

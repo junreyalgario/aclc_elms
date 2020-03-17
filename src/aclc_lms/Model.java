@@ -33,6 +33,7 @@ public class Model {
                     user.setlName(resultSet.getString("l_name"));
                     user.setmName(resultSet.getString("m_name"));
                     user.setGender(resultSet.getString("gender"));
+                    user.setDob(resultSet.getString("dob"));
                     user.setContactNo(resultSet.getString("contact_no"));
                     user.setAddress(resultSet.getString("address"));
                     user.setDepartment(resultSet.getString("department"));
@@ -42,6 +43,12 @@ public class Model {
                 helper.logException("Login failed! An error has occured.", null);
             }
         return user;
+    }
+    
+    public boolean updateProfile(String contact, String address, String pId) {
+        String sql = "UPDATE employee SET contact_no = '"+ contact +"', address = '"+ address +"' WHERE p_id = "+ pId;
+        db.executeSql(sql);
+        return true;
     }
     
     public boolean changePassword(String pId, String password, String newPassword) {
@@ -65,6 +72,20 @@ public class Model {
             helper.logException("ERROR searching user", sql);
         }
         return false;
+    }
+    
+    public String getEmployeeContactNo(String employeeId) {
+        String sql = "SELECT contact_no FROM employee WHERE employee_id = '"+ employeeId +"'";
+        try {
+            ResultSet resultSet = db.fetchData(sql);
+            if (resultSet.next()) {
+                return resultSet.getString("contact_no");
+            }
+            return "";
+        } catch (SQLException ex) {
+            helper.logException("Failed to fetch employee contact number", sql);
+            return "";
+        }
     }
     
     // Get table model
