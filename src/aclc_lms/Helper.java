@@ -1,7 +1,11 @@
 package aclc_lms;
 
+import aclc_lms.checkbox.CheckBoxListItem;
+import aclc_lms.checkbox.CheckBoxListRenderer;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.sql.Date;
@@ -13,9 +17,12 @@ import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -76,6 +83,7 @@ public class Helper {
         JDialog dialog = new JDialog(parentFrame, title, bool);
         dialog.getContentPane().add(mainPanel);
         dialog.pack();
+        dialog.setResizable(false);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         return dialog;

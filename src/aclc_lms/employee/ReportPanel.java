@@ -29,11 +29,11 @@ public class ReportPanel extends javax.swing.JPanel {
         txtSearch.getDocument().addDocumentListener(new DocumentListener(){
             @Override
             public void insertUpdate(DocumentEvent e) {
-                loadLeaveData("search");
+                loadMessage("search");
             }
             @Override
             public void removeUpdate(DocumentEvent e) {
-                loadLeaveData("search");
+                loadMessage("search");
             }
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -41,15 +41,15 @@ public class ReportPanel extends javax.swing.JPanel {
             }
         });
         
-        loadLeaveData("all");
+        loadMessage("all");
     }
     
-    public void loadLeaveData(String mode) {
+    public void loadMessage(String mode) {
         TableModel leaveTableModel;
-        String andConditon = "AND leave_request.p_id = "+ user.getpId();
+        String andConditon = "";
         if (mode.equals("search")) { 
             String search = txtSearch.getText();
-            andConditon = andConditon +" AND (leave_request.leave_request_id LIKE '%"+ search +"%' OR employee.employee_id LIKE '%"+ search +"%' OR employee.f_name LIKE '%"+ search +"%' OR employee.l_name LIKE '%"+ search +"%' OR employee.department LIKE '%"+ search +"%' OR leave_request.start_date LIKE '%"+ search +"%' OR leave_request.end_date LIKE '%"+ search +"%' OR leave_type.leave_name LIKE '%"+ search +"%')";
+            andConditon = andConditon +" AND (employee.f_name LIKE '%"+ search +"%' OR employee.l_name LIKE '%"+ search +"%' )";
         }
         leaveTableModel = model.getEmployeeLeaveTableReportModel(andConditon);
         // Update start date and end date column 

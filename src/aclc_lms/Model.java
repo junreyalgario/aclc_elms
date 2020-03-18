@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -109,6 +108,11 @@ public class Model {
         return DbUtils.resultSetToTableModel(getResultSet(sql));
     }
     
+    public TableModel getMessageTblModel(String WHERE) {
+        String sql = "SELECT message.message_id, message.message, message.sent_date, CONCAT(employee.f_name, ' ', employee.l_name) as fullname FROM message JOIN employee ON message.reciever = employee.p_id "+ WHERE;
+        return DbUtils.resultSetToTableModel(getResultSet(sql));
+    }
+    
     public ResultSet getLeaveRequest(String leaveId) {
         String sql = "SELECT *, CONCAT(f_name, ' ', l_name) as fullname FROM leave_type JOIN leave_request ON leave_type.leave_type_id = leave_request.leave_type_id JOIN employee ON leave_request.p_id = employee.p_id WHERE leave_request.leave_request_id = "+ leaveId;
         return db.fetchData(sql);
@@ -185,10 +189,20 @@ public class Model {
         int tblRowCount = tblModel.getRowCount();
         for (int i=0; i <tblRowCount; i++) {
             String sDate = helper.getddMMyyyyObject(tblModel.getValueAt(i, colIndex[0]).toString());
-            String eDate = helper.getddMMyyyyObject(tblModel.getValueAt(i, colIndex[1]).toString());
+            //String eDate = helper.getddMMyyyyObject(tblModel.getValueAt(i, colIndex[1]).toString());
             tblModel.setValueAt(sDate, i, colIndex[0]);
-            tblModel.setValueAt(eDate, i, colIndex[1]);
+            if (colIndex.length > 1) {
+                //tblModel.setValueAt(eDate, i, colIndex[1]);
+            }
         }
         return tblModel;
     }
+    
+    public ResultSet getAllEmployeeContact() {
+        String sql = "SELECT p_id, contact_no, concat(f_name, ' ', l_name) as fullname FROM employee";
+        //esultSet resultSet = db.fetchData(sql);
+        return db.fetchData(sql);
+    } 
+    
+    
 }

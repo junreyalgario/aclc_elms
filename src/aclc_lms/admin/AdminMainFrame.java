@@ -3,6 +3,7 @@ package aclc_lms.admin;
 import aclc_lms.Config;
 import aclc_lms.Helper;
 import aclc_lms.LoginFrame;
+import aclc_lms.Message;
 import aclc_lms.Model;
 import aclc_lms.PanelChangePassword;
 import aclc_lms.ProfilePanel;
@@ -17,6 +18,7 @@ import java.sql.SQLException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableModel;
@@ -30,7 +32,9 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private final Config config = new Config();
     private final Helper helper = new Helper(AdminMainFrame.class.getName());
     private final Model model = new Model();
-    public UserModel user;
+    public  UserModel user;
+    private int prevTabMainIndex = 0, tabmainSelectedTabIndex = 0;
+    private JFrame frame;
 
     public AdminMainFrame(UserModel user) {
         initComponents();
@@ -38,8 +42,9 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         this.user = user;
         // Load initial data to table 
         loadAllData();
-        JFrame frame = this;
+        frame = this;
         helper.addWindowClosingEvent(frame);
+        
     } 
     
     private void initAll() {
@@ -51,9 +56,38 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         tabMain.setTitleAt(0, "EMPLOYEE");
         tabMain.setTitleAt(1, "LEAVE REQUEST");
         tabMain.setTitleAt(2, "REPORT");
+        tabMain.setTitleAt(3, "MESSAGE");
+                
+        tabMain.addChangeListener((ChangeEvent e) -> {
+            prevTabMainIndex = tabmainSelectedTabIndex;
+            tabmainSelectedTabIndex = tabMain.getSelectedIndex();
+            if (tabmainSelectedTabIndex == 0) {
+                loadEmployeeData("all");
+            } else if (tabmainSelectedTabIndex == 1) {
+                loadLeaveData("all");
+            } else if (tabmainSelectedTabIndex == 2) {
+                if (tabPaneReport.getSelectedIndex() == 0) {
+                    loadEmployeeReportData("all");
+                } else if (tabPaneReport.getSelectedIndex() == 1) {
+                    loadLeaveReportData("all");
+                }
+            } else if (tabmainSelectedTabIndex == 3) {
+                tabMain.setSelectedIndex(prevTabMainIndex);
+                helper.dialogBuilder(this, new Message(user, frame), "Message", true);
+            }
+        });
         
         tabPaneReport.setTitleAt(0, "EMPLOYEE REPORT");
         tabPaneReport.setTitleAt(1, "EMPLOYEE LEAVE REPORT");
+        
+        tabPaneReport.addChangeListener((ChangeEvent e) -> {
+            int tabPaneReportSelectedTabIndex = tabPaneReport.getSelectedIndex();
+            if (tabPaneReportSelectedTabIndex == 0) {
+                loadEmployeeReportData("all");
+            } else if (tabPaneReportSelectedTabIndex == 1) {
+                loadLeaveReportData("all");
+            }
+        });
         
         // Set Tabpane header back color
         tabPaneReport.setBackground(Color.WHITE);
@@ -84,6 +118,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                
             }
         });
+        
         btnUpdate.setEnabled(false);
         
         
@@ -352,7 +387,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         changePasswordMenu = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -1267,15 +1301,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         });
         menuAccount.add(jMenuItem3);
 
-        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jMenuItem5.setText("Logout");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
-            }
-        });
-        menuAccount.add(jMenuItem5);
-
         jMenuBar1.add(menuAccount);
 
         setJMenuBar(jMenuBar1);
@@ -1647,9 +1672,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
        helper.dialogBuilder(this, new ProfilePanel(user), "Profile", true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -1706,7 +1728,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

@@ -53,7 +53,7 @@ public class LoginFrame extends javax.swing.JFrame {
         setResizable(false);
 
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtUsername.setText("CL1001");
+        txtUsername.setText("admin");
 
         lblLoginTitle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
         lblLoginTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
