@@ -55,6 +55,12 @@ public class Model {
     
     public boolean changePassword(String pId, String password, String newPassword) {
         if (searchUser(pId, password)) {
+            try {
+                password = helper.password.getSaltedHash(password);
+                newPassword = helper.password.getSaltedHash(newPassword); 
+            } catch (Exception ex) {
+                //Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            }
             String sql = "UPDATE employee SET password = '"+ newPassword +"' WHERE p_id = "+ pId;
             db.executeSql(sql);
             return true;
@@ -64,13 +70,17 @@ public class Model {
     }
     
     public boolean searchUser(String employeeId, String password) {
-        String sql = "SELECT * FROM employee WHERE p_id = "+ employeeId +" AND password = '"+ password +"'";
+        String sql = "SELECT * FROM employee WHERE p_id = "+ employeeId;
         ResultSet resultSet = db.fetchData(sql);
         try {
             if (resultSet.next()) {
-                return true;
+                if (helper.password.check(password, resultSet.getString("password"))) {
+                    return true;
+                }
             }
         } catch (SQLException ex) {
+            helper.logException("ERROR searching user", sql);
+        } catch (Exception ex) {
             helper.logException("ERROR searching user", sql);
         }
         return false;
