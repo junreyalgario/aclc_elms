@@ -15,6 +15,8 @@ import java.awt.Font;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -1418,6 +1420,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     }
     
     private void clearEmployeeFields() {
+        
         txtAddress.setText("");
         txtContactNo.setText("");
         txtCpassword.setText("");
@@ -1457,15 +1460,24 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (txtFieldValidation()) {
             if (isPasswordMatch()) {
-                String empId = model.generateEmployeeId(txtDepartment.getSelectedItem().toString());
-                Date dob = helper.dateConvert(txtDob.getDate());
-                
-                
-                String sql = "INSERT INTO employee VALUES(p_id, '"+ empId +"', '"+ txtFname.getText() +"', '"+ txtLname.getText() +"','"+ txtMname.getText() +"', '"+ txtGender.getSelectedItem().toString() +"', '"+ dob +"', '"+ txtContactNo.getText() +"', '"+ txtAddress.getText() +"', '"+ txtDepartment.getSelectedItem().toString()+"', '"+ txtPassword.getText()+"', '"+ helper.getCurrentDateTime() +"')";
-                model.query(sql);
-                loadEmployeeData("all");
-                clearEmployeeFields();
-                JOptionPane.showMessageDialog(null, "New employee data successfully save.");
+                try {
+                    if (helper.getYearDiff(txtDob.getDate(), helper.getCurrentDate()) < 18) {
+                        JOptionPane.showMessageDialog(null, "Employee must be 18 years old.");
+                        return;
+                    }
+                    String empId = model.generateEmployeeId(txtDepartment.getSelectedItem().toString());
+                    Date dob = helper.dateConvert(txtDob.getDate());
+                    
+                    String password = helper.password.getSaltedHash(txtPassword.getText());
+                    
+                    String sql = "INSERT INTO employee VALUES(p_id, '"+ empId +"', '"+ txtFname.getText() +"', '"+ txtLname.getText() +"','"+ txtMname.getText() +"', '"+ txtGender.getSelectedItem().toString() +"', '"+ dob +"', '"+ txtContactNo.getText() +"', '"+ txtAddress.getText() +"', '"+ txtDepartment.getSelectedItem().toString()+"', '"+ password +"', '"+ helper.getCurrentDateTime() +"')";
+                    model.query(sql);
+                    loadEmployeeData("all");
+                    clearEmployeeFields();
+                    JOptionPane.showMessageDialog(null, "New employee data successfully save.");
+                } catch (Exception ex) {
+                    Logger.getLogger(AdminMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }//GEN-LAST:event_btnAddActionPerformed

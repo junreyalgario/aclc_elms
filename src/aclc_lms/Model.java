@@ -20,27 +20,30 @@ public class Model {
     // USER ACCOUNT FUNCTIONS
     
     public UserModel auth(String username, String password) {
-        String sql = "SELECT * FROM employee WHERE employee_id = '"+ username +"' AND password = '"+ password +"'";
+        String sql = "SELECT * FROM employee WHERE employee_id = '"+ username +"'";
         UserModel user = new UserModel();
         ResultSet resultSet = db.fetchData(sql);
             try {
-                if (resultSet.next()) {     
-                    
-                    user.setPid(resultSet.getString("p_id"));
-                    user.setEmployeeId(resultSet.getString("employee_id"));
-                    user.setfName(resultSet.getString("f_name"));
-                    user.setlName(resultSet.getString("l_name"));
-                    user.setmName(resultSet.getString("m_name"));
-                    user.setGender(resultSet.getString("gender"));
-                    user.setDob(resultSet.getString("dob"));
-                    user.setContactNo(resultSet.getString("contact_no"));
-                    user.setAddress(resultSet.getString("address"));
-                    user.setDepartment(resultSet.getString("department"));
-                    user.isAuthSuccess = true;
+                if (resultSet.next()) {  
+                    if (helper.password.check(password, resultSet.getString("password"))) {
+                        user.setPid(resultSet.getString("p_id"));
+                        user.setEmployeeId(resultSet.getString("employee_id"));
+                        user.setfName(resultSet.getString("f_name"));
+                        user.setlName(resultSet.getString("l_name"));
+                        user.setmName(resultSet.getString("m_name"));
+                        user.setGender(resultSet.getString("gender"));
+                        user.setDob(resultSet.getString("dob"));
+                        user.setContactNo(resultSet.getString("contact_no"));
+                        user.setAddress(resultSet.getString("address"));
+                        user.setDepartment(resultSet.getString("department"));
+                        user.isAuthSuccess = true;
+                    }
                 }
             } catch (SQLException ex) {
                 helper.logException("Login failed! An error has occured.", null);
-            }
+            } catch (Exception ex) {
+                helper.logException("Login failed! An error has occured.", null);
+        }
         return user;
     }
     
@@ -198,8 +201,8 @@ public class Model {
         return tblModel;
     }
     
-    public ResultSet getAllEmployeeContact() {
-        String sql = "SELECT p_id, contact_no, concat(f_name, ' ', l_name) as fullname FROM employee";
+    public ResultSet getAllEmployeeContact(String pId) {
+        String sql = "SELECT p_id, contact_no, concat(f_name, ' ', l_name) as fullname FROM employee WHERE p_id != "+ pId;
         return db.fetchData(sql);
     } 
     

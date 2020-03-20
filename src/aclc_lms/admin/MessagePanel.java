@@ -2,7 +2,6 @@ package aclc_lms.admin;
 
 import aclc_lms.Helper;
 import aclc_lms.Model;
-import aclc_lms.ProgressBarPanel;
 import aclc_lms.UserModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -54,7 +53,7 @@ public class MessagePanel extends javax.swing.JPanel {
             }
         });
                 
-        ResultSet resultSet = model.getAllEmployeeContact();  
+        ResultSet resultSet = model.getAllEmployeeContact(user.getpId());  
         try {
             while (resultSet.next()) {
                 CheckBoxListItem checkboxListItem = new CheckBoxListItem(resultSet.getString("fullname"));
@@ -235,12 +234,14 @@ public class MessagePanel extends javax.swing.JPanel {
             for (int a=0; a<size; a++) {
                 CheckBoxListItem item = (CheckBoxListItem) list.getModel().getElementAt(a);
                 if (item.isSelected()) {
-                    //helper.sendSms(item.toString(), txtMsg.getText());
+                    helper.sendSms(item.toString(), txtMsg.getText());
                     String sql = "INSERT INTO message VALUES(message_id, '"+ txtMsg.getText() +"', '"+ helper.getCurrentDateTime() +"', 0, "+ item.getpId() +", "+ user.getpId() +")";
                     model.query(sql);
                     item.setSelected(false);
+                    list.repaint(list.getCellBounds(a, a));
                 }
             }
+            selectAllCheck.setSelected(false);
             JOptionPane.showMessageDialog(null, "Sms message successfully sent.");
             txtMsg.setText("");
         } else {

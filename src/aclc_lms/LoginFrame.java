@@ -2,7 +2,9 @@ package aclc_lms;
 
 import aclc_lms.admin.AdminMainFrame;
 import aclc_lms.employee.EmployeeMainFrame;
+import java.io.File;
 import javax.swing.JOptionPane;
+import smsUtil.SmsSender;
 
 public class LoginFrame extends javax.swing.JFrame {
 
@@ -17,6 +19,34 @@ public class LoginFrame extends javax.swing.JFrame {
         this.initGUI();
         model = new Model();
         helper = new Helper(LoginFrame.class.getName());
+        
+         // try-catch block to handle exceptions 
+        try { 
+  
+            // Create a file object 
+            File f = new File("Sam.java"); 
+  
+            // Get the absolute path of file f 
+            String absolute = f.getAbsolutePath(); 
+  
+            // Display the file path of the file object 
+            // and also the file path of absolute file 
+            JOptionPane.showMessageDialog(null, absolute);
+            File file = new File(absolute); 
+          
+            if(file.delete()) 
+            { 
+                JOptionPane.showMessageDialog(null, "File deleted"); 
+            } 
+            else
+            { 
+                JOptionPane.showMessageDialog(null, "Failed to delete file");
+            } 
+        } 
+        catch (Exception e) { 
+            System.err.println(e.getMessage()); 
+        } 
+        
     }
     
     private void initGUI() {

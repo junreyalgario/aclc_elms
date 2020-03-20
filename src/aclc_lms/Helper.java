@@ -12,25 +12,28 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import static java.util.Calendar.YEAR;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-/**
- *
- * @author Junrey Algario
- */
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
+import org.apache.commons.codec.binary.Base64;
+
 public class Helper {
     
     private final String className;
@@ -70,6 +73,19 @@ public class Helper {
         return new java.sql.Date(date.getTime());
     }
     
+    public long getYearDiff(java.util.Date date1, java.util.Date date2) {
+        Calendar calendar1 = getCalendar(dateConvert(date1));
+        Calendar calendar2 = getCalendar(dateConvert(date2));
+        int diff = calendar2.get(YEAR) - calendar1.get(YEAR);
+        return diff;   
+    }
+    
+    public static Calendar getCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance(Locale.US);
+        calendar.setTime(date);
+        return calendar;
+    }
+    
     public long getDateDiff(java.util.Date date1, java.util.Date date2) {
         return (dateConvert(date2).getTime() - dateConvert(date1).getTime())/86400000;    
     }
@@ -87,6 +103,12 @@ public class Helper {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         return dialog;
+    }
+    
+    public Date getCurrentDate() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateobj = new Date(System.currentTimeMillis());
+        return dateobj;
     }
     
     public String getCurrentDateTime() {
@@ -134,5 +156,40 @@ public class Helper {
                 super.windowClosing(e);
             }
         });
+    }
+    
+    public Password password = new Password();
+
+    public class Password {
+       
+        private static final int iterations = 20*1000;
+        private static final int saltLen = 32;
+        private static final int desiredKeyLen = 256;
+
+        public String getSaltedHash(String password) throws Exception {
+            byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLen);
+            // store the salt with the password
+            return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
+        }
+
+     
+        public boolean check(String password, String stored) throws Exception{
+            String[] saltAndHash = stored.split("\\$");
+            if (saltAndHash.length != 2) {
+                throw new IllegalStateException(
+                    "The stored password must have the form 'salt$hash'");
+            }
+            String hashOfInput = hash(password, Base64.decodeBase64(saltAndHash[0]));
+            return hashOfInput.equals(saltAndHash[1]);
+        }
+
+        private String hash(String password, byte[] salt) throws Exception {
+            if (password == null || password.length() == 0)
+                throw new IllegalArgumentException("Empty passwords are not supported.");
+            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKey key = f.generateSecret(new PBEKeySpec(
+                password.toCharArray(), salt, iterations, desiredKeyLen));
+            return Base64.encodeBase64String(key.getEncoded());
+        }
     }
 }
