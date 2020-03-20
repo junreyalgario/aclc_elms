@@ -23,12 +23,21 @@ public class ApplyPanel extends javax.swing.JPanel {
     }
     
     private boolean inputValidation() {
+        //JOptionPane.showMessageDialog(null, "Invalid leave duration." + helper.getDateDiff(txtStartDate.getDate(), helper.getCurrentDate()));
         if (txtReason.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Please enter your reason.");
             return false;
         }
+        if (helper.getDateDiff(txtStartDate.getDate(), helper.getCurrentDate()) > 0){
+            JOptionPane.showMessageDialog(null, "Invalid start date.");
+            return false;
+        }
         if (helper.getDateDiff(txtStartDate.getDate(), txtEndDate.getDate()) < 1){
             JOptionPane.showMessageDialog(null, "Invalid leave duration.");
+            return false;
+        }
+        if (model.hasLeave(user.getpId())) {
+            JOptionPane.showMessageDialog(null, "Sorry you still have leave in the future.");
             return false;
         }
         return true;
@@ -160,6 +169,9 @@ public class ApplyPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void isNoCurrentLeave() {
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;

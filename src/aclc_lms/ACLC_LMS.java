@@ -1,8 +1,5 @@
 package aclc_lms;
-/**
- *
- * @author Junrey Algario
- */
+
 public class ACLC_LMS {
 
     public static void main(String[] args) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aclc_lms;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -12,10 +7,6 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
-/**
- *
- * @author Junrey Algario
- */
 public class Config {
     // Db config
     public static String dbHostUrl = "jdbc:mysql://localhost/elms";

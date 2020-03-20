@@ -46,7 +46,7 @@ public class ReportPanel extends javax.swing.JPanel {
     
     public void loadMessage(String mode) {
         TableModel leaveTableModel;
-        String andConditon = "";
+        String andConditon = "AND leave_request.p_id = "+ user.getpId();
         if (mode.equals("search")) { 
             String search = txtSearch.getText();
             andConditon = andConditon +" AND (employee.f_name LIKE '%"+ search +"%' OR employee.l_name LIKE '%"+ search +"%' )";

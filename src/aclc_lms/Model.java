@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -121,8 +122,13 @@ public class Model {
         return DbUtils.resultSetToTableModel(getResultSet(sql));
     }
     
-    public TableModel getMessageTblModel(String WHERE) {
-        String sql = "SELECT message.message_id, message.message, message.sent_date, CONCAT(employee.f_name, ' ', employee.l_name) as fullname FROM message JOIN employee ON message.reciever = employee.p_id "+ WHERE;
+    public TableModel getMessageTblModel(String where) {
+        String sql = "SELECT message.message_id, message.message, message.sent_date, CONCAT(employee.f_name, ' ', employee.l_name) as fullname FROM message JOIN employee ON message.reciever = employee.p_id "+ where;
+        return DbUtils.resultSetToTableModel(getResultSet(sql));
+    }
+    
+    public TableModel getEmployeeMessageTblModel(String and, String pId) {
+        String sql = "SELECT message.message_id, message.message, message.sent_date, CONCAT(employee.f_name, ' ', employee.l_name) as fullname FROM message JOIN employee ON message.sender = employee.p_id WHERE message.reciever = "+ pId +" "+ and;
         return DbUtils.resultSetToTableModel(getResultSet(sql));
     }
     
@@ -216,5 +222,18 @@ public class Model {
         return db.fetchData(sql);
     } 
     
+    public boolean hasLeave(String pId) {
+        String today = helper.getCurrentDate().toString().replace("-", "");
+        String sql = "SELECT * FROM leave_request WHERE p_id = "+ pId +" AND end_date >= '"+ today +"'";
+        ResultSet resultSet = db.fetchData(sql);
+        try {
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            helper.logException("Failed to fetch leave name", sql);
+        }
+        return false;
+    }
     
 }

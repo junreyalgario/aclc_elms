@@ -16,7 +16,7 @@ public class LoginFrame extends javax.swing.JFrame {
         initComponents();
         this.initGUI();
         model = new Model();
-        helper = new Helper(LoginFrame.class.getName());      
+        helper = new Helper(LoginFrame.class.getName());
     }
     
     private void initGUI() {
@@ -53,7 +53,6 @@ public class LoginFrame extends javax.swing.JFrame {
         setResizable(false);
 
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtUsername.setText("admin");
 
         lblLoginTitle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
         lblLoginTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -66,7 +65,6 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel4.setText("Password");
 
         txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtPassword.setText("1");
 
         btnLogin.setBackground(java.awt.SystemColor.textHighlight);
         btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -140,7 +138,6 @@ public class LoginFrame extends javax.swing.JFrame {
                     case "College":
                     case "Senior High":
                         employeeMainForm = new EmployeeMainFrame(user);
-                        //employeeMainForm.user = user;
                         employeeMainForm.setLocationRelativeTo(null);
                         employeeMainForm.setExtendedState(MAXIMIZED_BOTH);
                         employeeMainForm.setVisible(true);

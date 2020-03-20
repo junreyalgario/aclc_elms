@@ -1,9 +1,5 @@
 package aclc_lms;
 
-/**
- *
- * @author Junrey Algario
- */
 public class UserModel {
     private String pId;
     private String employeeId;
@@ -99,7 +95,6 @@ public class UserModel {
 
     public void setDepartment(String department) {
         this.department = department;
-    }
-    
+    } 
     
 }

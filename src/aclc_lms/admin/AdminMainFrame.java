@@ -25,10 +25,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableModel;
 
-/**
- *
- * @author Junrey Algario
- */
 public final class AdminMainFrame extends javax.swing.JFrame {
     
     private final Config config = new Config();
@@ -46,7 +42,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         loadAllData();
         frame = this;
         helper.addWindowClosingEvent(frame);
-        
+        menuAccount.setText("ADMIN - "+ user.getFullName().toUpperCase());
     } 
     
     private void initAll() {
@@ -328,7 +324,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         jLabel40 = new javax.swing.JLabel();
         btnClear = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -484,19 +479,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             }
         });
 
-        btnDelete.setBackground(new java.awt.Color(255, 0, 51));
-        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aclc_lms/asset/delete.png"))); // NOI18N
-        btnDelete.setText("DELETE");
-        btnDelete.setFocusable(false);
-        btnDelete.setPreferredSize(new java.awt.Dimension(93, 40));
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
         btnUpdate.setBackground(java.awt.SystemColor.textHighlight);
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
@@ -520,12 +502,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                     .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel36)
                         .addGroup(jPanel6Layout.createSequentialGroup()
                             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -559,7 +536,8 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(txtCpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -610,9 +588,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -1268,12 +1244,13 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         jMenuBar1.setBackground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
+        menuAccount.setText("ADMIN - BILL GATES");
         menuAccount.setToolTipText("Account");
+        menuAccount.setActionCommand("ADMIN - BILL GATES");
         menuAccount.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menuAccount.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         menuAccount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         menuAccount.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        menuAccount.setLabel("ADMIN - JUNREY ALGARIO");
         menuAccount.setPreferredSize(new java.awt.Dimension(300, 30));
 
         jMenuItem4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -1452,11 +1429,8 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "All fields cannot be empty!");
             }
     }//GEN-LAST:event_btnUpdateActionPerformed
-    // Employee btn Delete
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        
-    }//GEN-LAST:event_btnDeleteActionPerformed
-    // Employee btn Add
+
+   // Employee btn Add
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (txtFieldValidation()) {
             if (isPasswordMatch()) {
@@ -1568,6 +1542,11 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             }
             
             String contactNo = model.getEmployeeContactNo(employeeId);
+            String sql = "UPDATE leave_request SET seen = 1, command = '"+ txtCommand.getText() +"', status = 'Accepted', start_date = '"+ startDate +"', end_date = '"+ endDate +"' WHERE leave_request_id = "+ leaveId;
+            model.query(sql);
+            JOptionPane.showMessageDialog(null, "Leave request accepted.");
+            loadLeaveData("all");
+            
             if (contactNo.trim().equals("")) {
                 JOptionPane.showMessageDialog(null, "Failed to send sms notification. Employee has no mobile contact number.");
             } else {
@@ -1584,10 +1563,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                     }
                 }
             }
-            String sql = "UPDATE leave_request SET seen = 1, command = '"+ txtCommand.getText() +"', status = 'Accepted', start_date = '"+ startDate +"', end_date = '"+ endDate +"' WHERE leave_request_id = "+ leaveId;
-            model.query(sql);
-            JOptionPane.showMessageDialog(null, "Leave request accepted.");
-            loadLeaveData("all");
         } else {
             JOptionPane.showMessageDialog(null, "Leave request date duration is not valid. End date must be the next day from start date or onwards.");
         }
@@ -1602,6 +1577,12 @@ public final class AdminMainFrame extends javax.swing.JFrame {
             String employeeId = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 1).toString();
             String name = tblLeave.getModel().getValueAt(tblLeave.getSelectedRow(), 3).toString();
             String contactNo = model.getEmployeeContactNo(employeeId);
+            
+            String sql = "UPDATE leave_request SET status = 'Rejected', seen = 1, command = '"+ txtCommand.getText() +"' WHERE leave_request_id = "+ leaveId;
+            model.query(sql);
+            JOptionPane.showMessageDialog(null, "Leave request rejected.");
+            loadLeaveData("all");
+            
             if (contactNo.trim().equals("")) {
                 JOptionPane.showMessageDialog(null, "Failed to send sms notification. Employee has no mobile contact number.");
             } else {
@@ -1618,10 +1599,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                     }
                 }
             }
-            String sql = "UPDATE leave_request SET status = 'Rejected', seen = 1, command = '"+ txtCommand.getText() +"' WHERE leave_request_id = "+ leaveId;
-            model.query(sql);
-            JOptionPane.showMessageDialog(null, "Leave request rejected.");
-            loadLeaveData("all");
+            
         }
     }//GEN-LAST:event_btnRejectActionPerformed
 
@@ -1698,7 +1676,6 @@ public final class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAccept1;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnReject;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUpdate4;

@@ -14,11 +14,13 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
     private final Config config = new Config();
     private final Helper helper;
     public UserModel user;
+    private final JFrame parentFrame;
     
     public EmployeeMainFrame(UserModel user) {
         initComponents();
         
         this.user = user;
+        parentFrame = this;
         
         this.setIconImage(config.appIconImage);
         this.getContentPane().setBackground(config.formBgColor);
@@ -46,7 +48,6 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         menuAccount = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -82,6 +83,11 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
 
         jMenu4.setText("MESSAGE");
         jMenu4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu4);
 
         jMenu3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
@@ -104,15 +110,6 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem4);
-
-        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jMenuItem5.setText("Leaves");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem5);
 
         jMenuBar1.add(jMenu3);
 
@@ -214,10 +211,6 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
         helper.dialogBuilder(this, new StatusPanel(user), "Leave Status", true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-       helper.dialogBuilder(this, new LeaveCountPanel(user), "Leave Count", true);
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
-
     private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
         helper.dialogBuilder(this, new ReportPanel(user, this), "Leave Report", true);
     }//GEN-LAST:event_jMenu5MouseClicked
@@ -225,6 +218,10 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         helper.dialogBuilder(this, new ProfilePanel(user), "Profile", true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+       helper.dialogBuilder(this, new MessagePanel(user, parentFrame), "Message", true);
+    }//GEN-LAST:event_jMenu4MouseClicked
 
 
     public static void main(String args[]) {
@@ -246,7 +243,6 @@ public class EmployeeMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JLabel lblCompanyName;
     private javax.swing.JLabel lblLoginTitle1;

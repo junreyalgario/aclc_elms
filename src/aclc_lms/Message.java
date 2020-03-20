@@ -1,6 +1,6 @@
 package aclc_lms;
 
-import aclc_lms.admin.MessagePanel;
+import aclc_lms.admin.SendMessagePanel;
 import aclc_lms.employee.ReportPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -45,19 +45,19 @@ public class Message extends javax.swing.JPanel {
     
     private void loadMessage(String mode) {
         TableModel msgTblModel;
-        String andConditon = "";
+        String where = "";
         if (mode.equals("search")) { 
             String search = txtSearch.getText(); // message.message_id, message.message, message.sent_date, CONCAT(employee.f_name, ' ', employee.l_name) as fullname
-            andConditon = andConditon +" WHERE (message_id LIKE '%"+ search +"%' OR message LIKE '%"+ search +"%' OR sent_date LIKE '%"+ search +"%' OR f_name LIKE '%"+ search +"%' OR l_name LIKE '%"+ search +"%')";
+            where = where +" WHERE (message_id LIKE '%"+ search +"%' OR message LIKE '%"+ search +"%' OR sent_date LIKE '%"+ search +"%' OR f_name LIKE '%"+ search +"%' OR l_name LIKE '%"+ search +"%')";
         }
-        msgTblModel = model.getMessageTblModel(andConditon);
+        msgTblModel = model.getMessageTblModel(where);
         // Update start date and end date column 
         int[] colIndex = {2};// Put the column index of the start_date and end_date column
         msgTblModel = model.updateStartEndDateColumn(msgTblModel, colIndex);
         
         tblMsg.setShowGrid(false);
         tblMsg.setIntercellSpacing(new Dimension(0,0));
-
+        
         tblMsg.setModel(msgTblModel);
         tblMsg.getColumnModel().getColumn(0).setHeaderValue("#");
         tblMsg.getColumnModel().getColumn(1).setHeaderValue("Message");
@@ -193,11 +193,13 @@ public class Message extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAccept2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccept2ActionPerformed
-        helper.dialogBuilder(parentFrame, new MessagePanel(user, parentFrame), "Message", true);
+        helper.dialogBuilder(parentFrame, new SendMessagePanel(user, parentFrame), "Message", true);
     }//GEN-LAST:event_btnAccept2ActionPerformed
 
     private void tblMsgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMsgMouseClicked
-        
+        int i = tblMsg.getSelectedRow();
+        String msg = tblMsg.getModel().getValueAt(i, 1).toString();
+        helper.dialogBuilder(parentFrame, new ViewMessage(msg), "Message", true);
     }//GEN-LAST:event_tblMsgMouseClicked
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed

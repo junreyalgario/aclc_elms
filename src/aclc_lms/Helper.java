@@ -1,11 +1,7 @@
 package aclc_lms;
 
-import aclc_lms.checkbox.CheckBoxListItem;
-import aclc_lms.checkbox.CheckBoxListRenderer;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.sql.Date;
@@ -37,6 +33,7 @@ import org.apache.commons.codec.binary.Base64;
 public class Helper {
     
     private final String className;
+    public Password password = new Password();
 
     public Helper(String className) {
         this.className = className;
@@ -80,7 +77,7 @@ public class Helper {
         return diff;   
     }
     
-    public static Calendar getCalendar(Date date) {
+    public Calendar getCalendar(Date date) {
         Calendar calendar = Calendar.getInstance(Locale.US);
         calendar.setTime(date);
         return calendar;
@@ -116,7 +113,7 @@ public class Helper {
         Date dateobj = new Date(System.currentTimeMillis());
         return df.format(dateobj);
     }
-    //dd MMMM yyyy = 02 January 2018
+
     public String getddMMyyyyObject(String dateObject) {
         DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
         java.util.Date date;
@@ -139,7 +136,7 @@ public class Helper {
             response = client.newCall(request).execute();
             return response.body().string().equals("1");
         } catch (IOException ex) {
-            this.logException("Failed to send sms.", ex.toString());
+            this.logException("Failed to send sms. 10 free sms limit has consumed or not connected to internet", ex.toString());
             return false;
         }
     }
@@ -157,8 +154,6 @@ public class Helper {
             }
         });
     }
-    
-    public Password password = new Password();
 
     public class Password {
        

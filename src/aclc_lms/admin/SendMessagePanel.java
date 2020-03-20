@@ -21,7 +21,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 
-public class MessagePanel extends javax.swing.JPanel {
+public class SendMessagePanel extends javax.swing.JPanel {
 
     private UserModel user;
     private final Model model = new Model();
@@ -32,10 +32,10 @@ public class MessagePanel extends javax.swing.JPanel {
     private DefaultListModel mainListModel = new DefaultListModel();
     private DefaultListModel tempListModel = new DefaultListModel();
     
-    public MessagePanel(UserModel user, JFrame frame) {
+    public SendMessagePanel(UserModel user, JFrame frame) {
         initComponents();
         this.user = user;
-        helper = new Helper(MessagePanel.class.getName());
+        helper = new Helper(SendMessagePanel.class.getName());
         parentFrame = frame;
         
         txtSearch.getDocument().addDocumentListener(new DocumentListener(){
