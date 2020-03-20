@@ -200,7 +200,6 @@ public class Model {
     
     public ResultSet getAllEmployeeContact() {
         String sql = "SELECT p_id, contact_no, concat(f_name, ' ', l_name) as fullname FROM employee";
-        //esultSet resultSet = db.fetchData(sql);
         return db.fetchData(sql);
     } 
     

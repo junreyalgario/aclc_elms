@@ -1,12 +1,12 @@
 package aclc_lms.checkbox;
 
 public class CheckBoxListItem {
-    private String label;
     private boolean isSelected = false;
     private String pId;
+    private String fullName;
     
-    public CheckBoxListItem(String label) {
-        this.label = label;
+    public CheckBoxListItem(String fullName) {
+        this.fullName = fullName;
     }
  
     public boolean isSelected() {
@@ -18,7 +18,7 @@ public class CheckBoxListItem {
     }
  
     public String toString() {
-        return label;
+        return fullName;
     }
     
     public String getpId() {

@@ -193,7 +193,7 @@ public class Message extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAccept2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccept2ActionPerformed
-        helper.dialogBuilder(parentFrame, new MessagePanel(user), "Message", true);
+        helper.dialogBuilder(parentFrame, new MessagePanel(user, parentFrame), "Message", true);
     }//GEN-LAST:event_btnAccept2ActionPerformed
 
     private void tblMsgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMsgMouseClicked
