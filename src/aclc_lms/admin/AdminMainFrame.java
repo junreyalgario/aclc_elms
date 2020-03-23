@@ -21,6 +21,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableModel;
@@ -56,34 +57,42 @@ public final class AdminMainFrame extends javax.swing.JFrame {
         tabMain.setTitleAt(2, "REPORT");
         tabMain.setTitleAt(3, "MESSAGE");
                 
-        tabMain.addChangeListener((ChangeEvent e) -> {
-            prevTabMainIndex = tabmainSelectedTabIndex;
-            tabmainSelectedTabIndex = tabMain.getSelectedIndex();
-            if (tabmainSelectedTabIndex == 0) {
-                loadEmployeeData("all");
-            } else if (tabmainSelectedTabIndex == 1) {
-                loadLeaveData("all");
-            } else if (tabmainSelectedTabIndex == 2) {
-                if (tabPaneReport.getSelectedIndex() == 0) {
-                    loadEmployeeReportData("all");
-                } else if (tabPaneReport.getSelectedIndex() == 1) {
-                    loadLeaveReportData("all");
+        tabMain.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                prevTabMainIndex = tabmainSelectedTabIndex;
+                tabmainSelectedTabIndex = tabMain.getSelectedIndex();
+                if (tabmainSelectedTabIndex == 0) {
+                    loadEmployeeData("all");
+                } else if (tabmainSelectedTabIndex == 1) {
+                    loadLeaveData("all");
+                } else if (tabmainSelectedTabIndex == 2) {
+                    if (tabPaneReport.getSelectedIndex() == 0) {
+                        loadEmployeeReportData("all");
+                    } else if (tabPaneReport.getSelectedIndex() == 1) {
+                        loadLeaveReportData("all");
+                    }
+                } else if (tabmainSelectedTabIndex == 3) {
+                    tabMain.setSelectedIndex(prevTabMainIndex);
+                    helper.dialogBuilder(AdminMainFrame.this, new Message(user, frame), "Message", true);
                 }
-            } else if (tabmainSelectedTabIndex == 3) {
-                tabMain.setSelectedIndex(prevTabMainIndex);
-                helper.dialogBuilder(this, new Message(user, frame), "Message", true);
             }
         });
         
         tabPaneReport.setTitleAt(0, "EMPLOYEE REPORT");
         tabPaneReport.setTitleAt(1, "EMPLOYEE LEAVE REPORT");
         
-        tabPaneReport.addChangeListener((ChangeEvent e) -> {
-            int tabPaneReportSelectedTabIndex = tabPaneReport.getSelectedIndex();
-            if (tabPaneReportSelectedTabIndex == 0) {
-                loadEmployeeReportData("all");
-            } else if (tabPaneReportSelectedTabIndex == 1) {
-                loadLeaveReportData("all");
+        tabPaneReport.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int tabPaneReportSelectedTabIndex = tabPaneReport.getSelectedIndex();
+                if (tabPaneReportSelectedTabIndex == 0) {
+                    loadEmployeeReportData("all");
+                } else if (tabPaneReportSelectedTabIndex == 1) {
+                    loadLeaveReportData("all");
+                }
             }
         });
         
@@ -1666,8 +1675,12 @@ public final class AdminMainFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> {
-            new AdminMainFrame(new UserModel()).setVisible(true);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                new AdminMainFrame(new UserModel()).setVisible(true);
+            }
         });
     }
 
