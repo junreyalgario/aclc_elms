@@ -1453,7 +1453,7 @@ public final class AdminMainFrame extends javax.swing.JFrame {
                     
                     String password = helper.password.getSaltedHash(txtPassword.getText());
                     
-                    String sql = "INSERT INTO employee VALUES(p_id, '"+ empId +"', '"+ txtFname.getText() +"', '"+ txtLname.getText() +"','"+ txtMname.getText() +"', '"+ txtGender.getSelectedItem().toString() +"', '"+ dob +"', '"+ txtContactNo.getText() +"', '"+ txtAddress.getText() +"', '"+ txtDepartment.getSelectedItem().toString()+"', '"+ password +"', '"+ helper.getCurrentDateTime() +"')";
+                    String sql = "INSERT INTO employee VALUES(p_id, '"+ empId +"', '"+ txtFname.getText() +"', '"+ txtMname.getText() +"','"+ txtLname.getText() +"', '"+ txtGender.getSelectedItem().toString() +"', '"+ dob +"', '"+ txtContactNo.getText() +"', '"+ txtAddress.getText() +"', '"+ txtDepartment.getSelectedItem().toString()+"', '"+ password +"', '"+ helper.getCurrentDateTime() +"')";
                     model.query(sql);
                     loadEmployeeData("all");
                     clearEmployeeFields();
